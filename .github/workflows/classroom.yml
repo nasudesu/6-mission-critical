@@ -1,0 +1,55 @@
+name: Autograding Tests
+
+on:
+  - push
+  - workflow_dispatch
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-tests:
+    # https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # https://github.com/actions/setup-node
+    - name: Use Node.js v22
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+
+    # https://github.com/gitleaks/gitleaks/
+    - name: Setup gitleaks
+      run: |
+        wget https://github.com/gitleaks/gitleaks/releases/download/v8.22.0/gitleaks_8.22.0_linux_x64.tar.gz
+        tar zxf gitleaks_8.22.0_linux_x64.tar.gz gitleaks
+        ls -lh
+
+    # https://github.com/classroom-resources/autograding-command-grader
+    - name: Testing Commit Structure
+      id: commitstests
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Commit structure tests'
+        command: 'node --test --experimental-test-snapshots .github/repository.test.mjs'
+        timeout: 2
+        max-score: 1
+
+    # https://github.com/classroom-resources/autograding-grading-reporter
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        COMMITSTESTS_RESULTS: "${{steps.commitstests.outputs.result}}"
+      with:
+        runners: commitstests

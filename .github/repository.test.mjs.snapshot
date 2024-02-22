@@ -1,0 +1,19 @@
+exports[`commit author dates > should have author dates in the expected chronogical order 1`] = `
+[
+  "2024-07-17T08:05:18+02:00",
+  "2024-07-12T22:10:33+02:00",
+  "2024-06-25T11:55:41+02:00",
+  "2024-03-11T19:50:07+02:00",
+  "2024-02-22T13:35:56+02:00"
+]
+`;
+
+exports[`commit messages > should have commit messages in the expected order 1`] = `
+[
+  "Vite & React & Typescript",
+  "Material UI is an open-source React component library\\n\\nSigned-off-by: Jukka Paasonen <jukka.paasonen@metropolia.fi>",
+  "License as CC BY-SA 4.0\\n\\nSigned-off-by: Jukka Paasonen <jukka.paasonen@metropolia.fi>",
+  "Update Node.js dependencies",
+  "Vite & React"
+]
+`;
